@@ -1,9 +1,10 @@
 import React from 'react';
-import { StatusBar, StyleSheet, Text, View } from 'react-native';
+import { StatusBar, StyleSheet, Text, View, Platform } from 'react-native';
 import Constants from 'expo-constants';
 import NetInfo from '@react-native-community/netinfo';
 
-const statusHeight = Platform.OS === 'ios' ? Constants.statusBarHeight : StatusBar.currentHeight;
+const statusHeight =
+  Platform.OS === 'ios' ? Constants.statusBarHeight : StatusBar.currentHeight;
 
 export default class Status extends React.Component {
   state = {
@@ -33,28 +34,20 @@ export default class Status extends React.Component {
     const isConnected = info !== 'none';
     const backgroundColor = isConnected ? 'white' : 'red';
 
-    const statusBar = (
-      <StatusBar
-        backgroundColor={backgroundColor}
-        barStyle={isConnected ? 'dark-content' : 'light-content'}
-        animated={false}
-      />
-    );
-
-    const messageContainer = (
-      <View style={styles.messageContainer} pointerEvents="none">
-        {statusBar}
-        {!isConnected && (
-          <View style={styles.bubble}>
-            <Text style={styles.text}>No Network Connection!</Text>
-          </View>
-        )}
-      </View>
-    );
-
     return (
       <View style={[styles.status, { backgroundColor }]}>
-        {messageContainer}
+        <StatusBar
+          backgroundColor={backgroundColor}
+          barStyle={isConnected ? 'dark-content' : 'light-content'}
+          animated={false}
+        />
+        {!isConnected && (
+          <View style={styles.messageContainer} pointerEvents="none">
+            <View style={styles.bubble}>
+              <Text style={styles.text}>No Network Connection!</Text>
+            </View>
+          </View>
+        )}
       </View>
     );
   }
